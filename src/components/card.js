@@ -29,26 +29,35 @@ function Card() {
   const [timer, setTimer] = useState(1);
   const [time, setTime] = useState(1);
   const [intervals, setIntervals] = useState();
+  const [start, setStart] = useState(false);
+
+  const startHandler = () => {
+    setStart(true);
+  };
 
   const clickHandler = (a) => {
     if (time === 0) setOrder([...order, a]);
   };
   useEffect(() => {
-    if (level < 6) {
-      setTime(6 - level);
-    } else {
-      setTime(11 - level);
+    if (start) {
+      if (level < 6) {
+        setTime(6 - level);
+      } else {
+        setTime(11 - level);
+      }
     }
-  }, [intervals]);
+  }, [start, intervals]);
   useEffect(() => {
-    const id = setInterval(() => {
-      setTime((time) => time - 1);
-    }, 1000);
-    if (time === 0) {
-      setTimer(0);
-      clearInterval(id);
+    if (start) {
+      const id = setInterval(() => {
+        setTime((time) => time - 1);
+      }, 1000);
+      if (time === 0) {
+        setTimer(0);
+        clearInterval(id);
+      }
+      return () => clearInterval(id);
     }
-    return () => clearInterval(id);
   }, [time]);
   useEffect(() => {
     if (order.length === cardsNum) {
@@ -86,7 +95,7 @@ function Card() {
   }, [cardsNum]);
   return (
     <>
-      {level < 11 ? (
+      {level < 11 && start ? (
         <div style={{ textAlign: "center" }}>
           <div>level : {level}</div>
           <div>timer : {time}</div>
@@ -107,7 +116,7 @@ function Card() {
           </Grid>
         </div>
       ) : (
-        <div>Finished</div>
+        <button onClick={startHandler}>시작하기</button>
       )}
     </>
   );
