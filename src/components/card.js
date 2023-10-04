@@ -24,15 +24,13 @@ function Card() {
   const [level, setLevel] = useState(1);
   const [cardsNum, setCardsNum] = useState(4);
   const [howMany, setHowMany] = useState(0);
-  const [correct, setCorrect] = useState(
-    Array.from({ length: cardsNum }, (v, i) => i + 1)
-  );
+  const [correct, setCorrect] = useState(0);
   const [order, setOrder] = useState([]);
   const [timer, setTimer] = useState(1);
   const [time, setTime] = useState(1);
   const [intervals, setIntervals] = useState();
 
-  const clickHandler = (a, b) => {
+  const clickHandler = (a) => {
     if (time === 0) setOrder([...order, a]);
   };
   useEffect(() => {
@@ -99,7 +97,7 @@ function Card() {
                     <ClickedCards
                       key={b}
                       onClick={() => {
-                        clickHandler(a, b);
+                        clickHandler(a);
                       }}>
                       {timer === 0 ? null : a}
                     </ClickedCards>
