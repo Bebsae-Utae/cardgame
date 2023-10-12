@@ -13,9 +13,43 @@ const ClickedCards = styled.div`
 `;
 const Grid = styled.div`
   margin: auto;
+  margin-top: 12px;
   width: ${(props) => props.width};
   display: grid;
   grid-template-columns: ${(props) => props.columns};
+`;
+const StartBtn = styled.button`
+  border-radius: 20px;
+  background: white;
+  color: black;
+  margin: 30px;
+  padding: 20px;
+  font-size: 30px;
+  border: none;
+`;
+const Title = styled.div`
+  font-size: 30px;
+  margin: 10px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+`;
+const Intro = styled.pre`
+  font-size: 16px;
+  margin: 16px;
+  color: black;
+  margin-top: 200px;
+`;
+const Info = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  background: green;
+  color: white;
+  border-radius: 12px;
+  margin: auto;
+  margin-top: 8px;
+  padding: 4px;
+  width: 120px;
 `;
 
 function Card() {
@@ -24,10 +58,10 @@ function Card() {
   const [level, setLevel] = useState(1);
   const [count, setCount] = useState(4);
   const [cardsNum, setCardsNum] = useState([
-    { id: 1, color: "grey" },
-    { id: 2, color: "grey" },
-    { id: 3, color: "grey" },
-    { id: 4, color: "grey" },
+    { id: 1, color: "white" },
+    { id: 2, color: "white" },
+    { id: 3, color: "white" },
+    { id: 4, color: "white" },
   ]);
   const [howMany, setHowMany] = useState(0);
   const [correct, setCorrect] = useState(0);
@@ -73,15 +107,15 @@ function Card() {
       if (order.toString() === correct.toString()) {
         if (level > 4) {
           setCardsNum([
-            { id: 1, color: "grey" },
-            { id: 2, color: "grey" },
-            { id: 3, color: "grey" },
-            { id: 4, color: "grey" },
-            { id: 5, color: "grey" },
-            { id: 6, color: "grey" },
-            { id: 7, color: "grey" },
-            { id: 8, color: "grey" },
-            { id: 9, color: "grey" },
+            { id: 1, color: "white" },
+            { id: 2, color: "white" },
+            { id: 3, color: "white" },
+            { id: 4, color: "white" },
+            { id: 5, color: "white" },
+            { id: 6, color: "white" },
+            { id: 7, color: "white" },
+            { id: 8, color: "white" },
+            { id: 9, color: "white" },
           ]);
           setWidth("510px");
           setColumns("1fr 1fr 1fr");
@@ -98,7 +132,7 @@ function Card() {
         setOrder([]);
         setIntervals(Math.random());
         cardsNum.map((a, b) => {
-          a.color = "grey";
+          a.color = "white";
         });
       } else {
         console.log("fail");
@@ -106,7 +140,7 @@ function Card() {
         setOrder([]);
         setIntervals(Math.random());
         cardsNum.map((a, b) => {
-          a.color = "grey";
+          a.color = "white";
         });
       }
     }
@@ -114,11 +148,7 @@ function Card() {
   useEffect(() => {
     console.log("error?");
     console.log(cardsNum);
-    setHowMany(
-      // Array.from({ length: cardsNum }, (v, i) => i + 1).sort(
-      //   () => Math.random() - 0.5
-      cardsNum.sort(() => Math.random() - 0.5)
-    );
+    setHowMany(cardsNum.sort(() => Math.random() - 0.5));
 
     setCorrect(Array.from({ length: count }, (v, i) => i + 1));
   }, [cardsNum]);
@@ -126,8 +156,8 @@ function Card() {
     <>
       {level < 11 && start ? (
         <div style={{ textAlign: "center" }}>
-          <div>level : {level}</div>
-          <div>timer : {time}</div>
+          <Info>Level : {level}</Info>
+          <Info>Timer : {time}</Info>
           <Grid width={width} columns={columns}>
             {howMany
               ? howMany.map((a, b) => {
@@ -146,7 +176,15 @@ function Card() {
           </Grid>
         </div>
       ) : (
-        <button onClick={startHandler}>시작하기</button>
+        <>
+          <Intro>
+            <Title>게임 규칙</Title>
+            1. 타이머에 표시된 시간 만큼 카드의 순서가 표시됨<br></br>
+            2. 타이머가 0이 되면 카드의 순서가 사라짐<br></br>
+            3. 표시되었던 순서대로 카드를 클릭하면 성공
+          </Intro>
+          <StartBtn onClick={startHandler}>시작하기</StartBtn>
+        </>
       )}
     </>
   );
