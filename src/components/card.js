@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const ClickedCards = styled.div`
-  background: grey;
+  background: ${(props) => props.bg};
   width: 150px;
   height: 200px;
   border-radius: 20px;
@@ -22,7 +22,13 @@ function Card() {
   const [width, setWidth] = useState("340px");
   const [columns, setColumns] = useState("1fr 1fr");
   const [level, setLevel] = useState(1);
-  const [cardsNum, setCardsNum] = useState(4);
+  const [count, setCount] = useState(4);
+  const [cardsNum, setCardsNum] = useState([
+    { id: 1, color: "grey" },
+    { id: 2, color: "grey" },
+    { id: 3, color: "grey" },
+    { id: 4, color: "grey" },
+  ]);
   const [howMany, setHowMany] = useState(0);
   const [correct, setCorrect] = useState(0);
   const [order, setOrder] = useState([]);
@@ -36,7 +42,10 @@ function Card() {
   };
 
   const clickHandler = (a) => {
-    if (time === 0) setOrder([...order, a]);
+    if (time === 0) {
+      setOrder([...order, a.id]);
+      a.color = "green";
+    }
   };
   useEffect(() => {
     if (start) {
@@ -60,13 +69,24 @@ function Card() {
     }
   }, [time]);
   useEffect(() => {
-    if (order.length === cardsNum) {
+    if (order.length === cardsNum.length) {
       if (order.toString() === correct.toString()) {
         if (level > 4) {
-          setCardsNum(9);
+          setCardsNum([
+            { id: 1, color: "grey" },
+            { id: 2, color: "grey" },
+            { id: 3, color: "grey" },
+            { id: 4, color: "grey" },
+            { id: 5, color: "grey" },
+            { id: 6, color: "grey" },
+            { id: 7, color: "grey" },
+            { id: 8, color: "grey" },
+            { id: 9, color: "grey" },
+          ]);
           setWidth("510px");
           setColumns("1fr 1fr 1fr");
           setTimer(1);
+          setCount(9);
         }
         if (level === 10) {
           console.log("finish");
@@ -77,21 +97,30 @@ function Card() {
         setTimer(1);
         setOrder([]);
         setIntervals(Math.random());
+        cardsNum.map((a, b) => {
+          a.color = "grey";
+        });
       } else {
         console.log("fail");
         setTimer(1);
         setOrder([]);
         setIntervals(Math.random());
+        cardsNum.map((a, b) => {
+          a.color = "grey";
+        });
       }
     }
   }, [order]);
   useEffect(() => {
+    console.log("error?");
+    console.log(cardsNum);
     setHowMany(
-      Array.from({ length: cardsNum }, (v, i) => i + 1).sort(
-        () => Math.random() - 0.5
-      )
+      // Array.from({ length: cardsNum }, (v, i) => i + 1).sort(
+      //   () => Math.random() - 0.5
+      cardsNum.sort(() => Math.random() - 0.5)
     );
-    setCorrect(Array.from({ length: cardsNum }, (v, i) => i + 1));
+
+    setCorrect(Array.from({ length: count }, (v, i) => i + 1));
   }, [cardsNum]);
   return (
     <>
@@ -105,10 +134,11 @@ function Card() {
                   return (
                     <ClickedCards
                       key={b}
+                      bg={a.color}
                       onClick={() => {
                         clickHandler(a);
                       }}>
-                      {timer === 0 ? null : a}
+                      {timer === 0 ? null : a.id}
                     </ClickedCards>
                   );
                 })
